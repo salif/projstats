@@ -1,6 +1,7 @@
 package com.salifm.projstats;
 
 import javax.swing.*;
+import java.io.File;
 
 class GuiWindow implements Window {
     private JFrame frame;
@@ -11,7 +12,9 @@ class GuiWindow implements Window {
         this.frame = new JFrame("projstats - " + dir);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setSize(400,400);
-        add("path", dir);
+        File file = new File(dir);
+        add("name", file.getName());
+        add("size", Unit.get(walker.getSize()));
         add("files ", walker.getFiles());
         add("folders", walker.getFolders());
         add("lines", walker.getLines());

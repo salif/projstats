@@ -1,11 +1,13 @@
 package com.salifm.projstats;
 
-import javax.swing.*;
+import java.io.File;
 
 class CliWindow implements Window {
     CliWindow(String dir, Walker walker) {
-        add("path", dir);
-        add("files ", walker.getFiles());
+        File file = new File(dir);
+        add("name", file.getName());
+        add("size", Unit.get(walker.getSize()));
+        add("files", walker.getFiles());
         add("folders", walker.getFolders());
         add("lines", walker.getLines());
         add("empty lines", walker.getEmptyLines());
