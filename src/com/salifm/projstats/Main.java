@@ -10,8 +10,8 @@ public class Main {
         boolean wait = true;
         boolean list = false;
 
-        if (args.length > 0) {
-            switch(args[0]) {
+        for (int i = 0; i < args.length; i++) {
+            switch(args[i]) {
                 case "--help":
                     printHelp();
                     return;
