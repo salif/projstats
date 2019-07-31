@@ -92,7 +92,7 @@ class Walker {
         if (ind > p) {
             extension = name.substring(ind + 1);
         } else {
-            extension = "[no-extension]";
+            extension = "[none]";
         }
         if (this.extensions.containsKey(extension)) {
             this.extensions.put(extension, this.extensions.get(extension) + 1);

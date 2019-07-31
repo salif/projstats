@@ -2,7 +2,6 @@ package com.salifm.projstats;
 
 public class Main {
     public static void main(String[] args) {
-        Window window;
         String path = System.getProperty("user.dir");
 
         boolean cli = true;
@@ -10,8 +9,8 @@ public class Main {
         boolean wait = true;
         boolean list = false;
 
-        for (int i = 0; i < args.length; i++) {
-            switch(args[i]) {
+        for (String arg : args) {
+            switch (arg) {
                 case "--help":
                     printHelp();
                     return;
@@ -32,10 +31,12 @@ public class Main {
 
         Walker walker = new Walker(path, wait, list);
         if(cli) {
-            window = new CliWindow(path, walker);
+            Window window = new CliWindow(path);
+            window.show(walker);
         }
         if(gui) {
-            window = new GuiWindow(path, walker);
+            Window window = new GuiWindow(path);
+            window.show(walker);
         }
     }
 
