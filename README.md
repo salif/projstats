@@ -1,9 +1,20 @@
 # projstats
 Count source lines of code
 
-# Install
+## Install
 
-[Soon]
+### Arch Linux
+
+- projstats is on [AUR](https://aur.archlinux.org/packages/projstats/)
+
+### Other distributions
+
+- [Download](https://github.com/salifm/projstats/releases)
+- `sudo make install`
+
+### Other OS
+
+- Build it yourself
 
 ## Usage
 
