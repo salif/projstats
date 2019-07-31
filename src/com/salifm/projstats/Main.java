@@ -41,9 +41,12 @@ public class Main {
 
     private static void printHelp() {
         System.out.printf("%n  Usage: %n%n" +
-                "    projstats [options]%n%n" +
+                "      projstats [options]%n%n" +
                 "  options:%n%n" +
-                "    --cli%n" +
-                "    --help%n%n");
+                "      --cli%n" +
+                "      --gui%n" +
+                "      --wait%n" +
+                "      --list%n" +
+                "      --help%n%n");
     }
 }
