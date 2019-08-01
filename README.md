@@ -64,5 +64,21 @@ Print help
 
 ## Example
 
-`projstats --cli --list-skipped --skip-dir=out`
+`projstats --cli --list-skipped --skip-dir=META-INF`
 
+```
+scanning...
+skipped: /home/salif/projstats/.git
+skipped: /home/salif/projstats/src/META-INF
+name: projstats
+size: 13.22 KiB / 13.54 KB
+files: 9
+folders: 4
+lines: 471
+empty lines: 84
+extensions: 
+  java (6)
+  [none] (1)
+  gitignore (1)
+  md (1)
+```
