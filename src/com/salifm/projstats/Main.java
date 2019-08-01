@@ -8,6 +8,7 @@ public class Main {
         boolean gui = true;
         boolean wait = true;
         boolean list = false;
+        boolean list_skipped = false;
 
         for (String arg : args) {
             switch (arg) {
@@ -26,15 +27,30 @@ public class Main {
                 case "--list":
                     list = true;
                     break;
+                case "--list-skipped":
+                    list_skipped = true;
+                    break;
+                default:
+                    if (arg.startsWith("--check-dir=")) {
+                        Walker.checkDir(arg.substring(12));
+                        return;
+                    } else if (arg.startsWith("--check-file=")) {
+                        Walker.checkFile(arg.substring(13));
+                        return;
+                    } else if (arg.startsWith("--skip-dir=")) {
+                        Walker.addSkipDir(arg.substring(11));
+                    } else if (arg.startsWith("--skip-file=")) {
+                        Walker.addSkipFile(arg.substring(12));
+                    }
             }
         }
 
-        Walker walker = new Walker(path, wait, list);
-        if(cli) {
+        Walker walker = new Walker(path, wait, list, list_skipped);
+        if (cli) {
             Window window = new CliWindow(path);
             window.show(walker);
         }
-        if(gui) {
+        if (gui) {
             Window window = new GuiWindow(path);
             window.show(walker);
         }
@@ -44,10 +60,15 @@ public class Main {
         System.out.printf("%n  Usage: %n%n" +
                 "      projstats [options]%n%n" +
                 "  options:%n%n" +
-                "      --cli%n" +
-                "      --gui%n" +
-                "      --wait%n" +
-                "      --list%n" +
-                "      --help%n%n");
+                "      --cli                    Run without GUI%n" +
+                "      --gui                    Run without CLI%n" +
+                "      --wait                   Run without progressbar%n" +
+                "      --list                   List files%n" +
+                "      --list-skipped           List skipped files and dirs%n" +
+                "      --check-dir=dir          Check if directory is skipped%n" +
+                "      --check-file=file        Check if file is skipped%n" +
+                "      --skip-dir=dir           Skip directory%n" +
+                "      --skip-file=file         Skip file%n" +
+                "      --help                   Print help%n%n");
     }
 }

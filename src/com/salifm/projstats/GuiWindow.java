@@ -35,9 +35,7 @@ class GuiWindow extends Window {
             add("  ", String.format("%s (%s)",arr[0], arr[1]));
         });
         if (list.size() > 10) {
-            int other = list.stream().skip(10).mapToInt(i -> {
-                return Integer.parseInt(i[1]);
-            }).sum();
+            int other = list.stream().skip(10).mapToInt(i -> Integer.parseInt(i[1])).sum();
             add("  [other]: ", other);
         }
     }

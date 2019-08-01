@@ -17,15 +17,17 @@ class Walker {
     private int folders;
     private long lines;
     private long emptyLines;
-    private List<String> forSkip;
+    private static List<String> skipDirs = new ArrayList<>(List.of(".git", "node_modules"));
+    private static List<String> skipFiles = new ArrayList<>();
     private boolean wait;
     private boolean list;
+    private boolean list_skipped;
     private Map<String, Integer> extensions;
 
-    Walker(String dir, boolean wait, boolean list) {
+    Walker(String dir, boolean wait, boolean list, boolean list_skipped) {
         this.wait = wait;
         this.list = list;
-        this.forSkip = new ArrayList<>(List.of(".git", "node_modules"));
+        this.list_skipped = list_skipped;
         this.extensions = new HashMap<>();
         System.out.print("scanning...");
         walk(dir);
@@ -36,12 +38,13 @@ class Walker {
 
         File[] files = new File(dir).listFiles();
 
-        assert files != null;
         for (final File f : files) {
             if (f.isDirectory()) {
-                if (skip(f)) {
+                if (!skipDirs.contains(f.getName())) {
                     this.folders++;
                     walk(f.getAbsolutePath());
+                } else if (list_skipped) {
+                    System.out.printf("%nskipped: %s", f.getAbsolutePath());
                 }
             }
             if (f.isFile()) {
@@ -54,23 +57,24 @@ class Walker {
         }
     }
 
-    private boolean skip(File f) {
-        return !this.forSkip.contains(f.getName());
-    }
-
     private void walkIntoFile(String name, long size) throws IOException {
         String[] commands = {"file", "-bi", name};
-        String output;
+        String output = "";
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(commands).getInputStream()))) {
             output = bufferedReader.readLine();
         }
-        if (output.contains("binary")) {
+        if (output.contains("binary") || skipFiles.contains(name)) {
+            if (this.list_skipped) {
+                System.out.printf("%nskipped: %s", name);
+            }
             return;
         }
         this.files++;
         this.size += size;
         if (this.list) {
             System.out.printf("%n%s", name);
+        } else if (this.list_skipped) {
+            // don't show progressbar if 'list_skipped' is true
         } else if (this.wait) {
             System.out.print(".");
         }
@@ -129,5 +133,40 @@ class Walker {
             a.add(new String[]{e.getKey(), String.valueOf(e.getValue())});
         });
         return a;
+    }
+
+    static void checkDir(String dir) {
+        if (skipDirs.contains(dir)) {
+            System.out.println(dir.concat(" is skipped"));
+        } else {
+            System.out.println(dir.concat(" is not skipped"));
+        }
+    }
+
+    static void checkFile(String file) {
+        if (skipFiles.contains(file)) {
+            System.out.println(file.concat(" is skipped"));
+            return;
+        }
+        String[] commands = {"file", "-bi", file};
+        String output = "";
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(commands).getInputStream()))) {
+            output = bufferedReader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (output.contains("binary")) {
+            System.out.println(file.concat(" is skipped"));
+        } else {
+            System.out.println(file.concat(" is not skipped"));
+        }
+    }
+
+    static void addSkipDir(String dir) {
+        skipDirs.add(dir);
+    }
+
+    static void addSkipFile(String file) {
+        skipFiles.add(file);
     }
 }
