@@ -36,8 +36,33 @@ Run without progressbar
 
 ### --list
 
-Print files
+List files
+
+### --list-skipped
+
+List skipped files and dirs
+
+### --check-dir=dir
+
+Check if directory is skipped
+
+### --check-file=file
+
+Check if file is skipped [absolute path]
+
+### --skip-dir=dir
+
+Skip directory
+
+### --skip-file=file
+
+Skip file [absolute path]
 
 ### --help
 
-Display help
+Print help
+
+## Example
+
+`projstats --cli --list-skipped --skip-dir=out`
+
