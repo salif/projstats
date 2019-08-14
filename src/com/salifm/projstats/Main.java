@@ -57,7 +57,7 @@ public class Main {
     }
 
     private static void printHelp() {
-        System.out.printf("%n  Usage: %n%n" +
+        Printer.printf("%n  Usage: %n%n" +
                 "      projstats [options]%n%n" +
                 "  options:%n%n" +
                 "      --cli                    Run without GUI%n" +

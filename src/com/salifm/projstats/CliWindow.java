@@ -7,7 +7,7 @@ class CliWindow extends Window {
 
     @Override
     public void add(String name, String text) {
-        System.out.println(name + text);
+        Printer.println(name + text);
     }
 
 }
