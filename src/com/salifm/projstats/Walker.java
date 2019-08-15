@@ -1,15 +1,7 @@
 package com.salifm.projstats;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 class Walker {
     private long size;
@@ -29,9 +21,9 @@ class Walker {
         this.list = list;
         this.list_skipped = list_skipped;
         this.extensions = new HashMap<>();
-        System.out.print("scanning...");
+        Printer.print("scanning...");
         walk(dir);
-        System.out.println();
+        Printer.println();
     }
 
     private void walk(String dir) {
@@ -44,12 +36,12 @@ class Walker {
                     this.folders++;
                     walk(f.getAbsolutePath());
                 } else if (list_skipped) {
-                    System.out.printf("%nskipped: %s", f.getAbsolutePath());
+                    Printer.printf("%nskipped: %s", f.getAbsolutePath());
                 }
             }
             if (f.isFile()) {
                 try {
-                    walkIntoFile(f.getAbsolutePath(), f.length());
+                    walkInFile(f.getAbsolutePath(), f.length());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -57,36 +49,50 @@ class Walker {
         }
     }
 
-    private void walkIntoFile(String name, long size) throws IOException {
-        String[] commands = {"file", "-bi", name};
-        String output = "";
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(commands).getInputStream()))) {
-            output = bufferedReader.readLine();
+    private void walkInFile(String name, long size) throws IOException {
+        long fileLines = 0;
+        long fileEmptyLines = 0;
+        boolean isBinary = false;
+        try (BufferedReader reader = new BufferedReader(new FileReader(name))) {
+            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+                if (line.isBlank()) fileEmptyLines++;
+                fileLines++;
+                if (charsBinary(line)) {
+                    isBinary = true;
+                    break;
+                }
+            }
         }
-        if (output.contains("binary") || skipFiles.contains(name)) {
+
+        if (isBinary || skipFiles.contains(name)) {
             if (this.list_skipped) {
-                System.out.printf("%nskipped: %s", name);
+                Printer.printf("%nskipped: %s", name);
             }
             return;
         }
+
+        this.lines += fileLines;
+        this.emptyLines += fileEmptyLines;
         this.files++;
         this.size += size;
+
         if (this.list) {
-            System.out.printf("%n%s", name);
+            Printer.printf("%n%s", name);
         } else if (this.list_skipped) {
             // don't show progressbar if 'list_skipped' is true
         } else if (this.wait) {
-            System.out.print(".");
+            Printer.print(".");
         }
         registerExtension(name);
-        try (BufferedReader reader = new BufferedReader(new FileReader(name))) {
-            while (true) {
-                String line = reader.readLine();
-                if (line == null) break;
-                if (line.isBlank()) this.emptyLines++;
-                this.lines++;
+    }
+
+    private static boolean charsBinary(String line) {
+        for (char c : line.toCharArray()) {
+            if (c < 0x09) {
+                return true;
             }
         }
+        return false;
     }
 
     private void registerExtension(String name) {
@@ -137,28 +143,33 @@ class Walker {
 
     static void checkDir(String dir) {
         if (skipDirs.contains(dir)) {
-            System.out.println(dir.concat(" is skipped"));
+            Printer.println(dir.concat(" is skipped"));
         } else {
-            System.out.println(dir.concat(" is not skipped"));
+            Printer.println(dir.concat(" is not skipped"));
         }
     }
 
     static void checkFile(String file) {
         if (skipFiles.contains(file)) {
-            System.out.println(file.concat(" is skipped"));
+            Printer.println(file.concat(" is skipped"));
             return;
         }
-        String[] commands = {"file", "-bi", file};
-        String output = "";
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(commands).getInputStream()))) {
-            output = bufferedReader.readLine();
+
+        boolean isBinary = false;
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+                if (charsBinary(line)) {
+                    isBinary = true;
+                    break;
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (output.contains("binary")) {
-            System.out.println(file.concat(" is skipped"));
+        if (isBinary) {
+            Printer.println(file.concat(" is skipped"));
         } else {
-            System.out.println(file.concat(" is not skipped"));
+            Printer.println(file.concat(" is not skipped"));
         }
     }
 
