@@ -6,7 +6,7 @@ public class Main {
     static boolean wait = true;
     static boolean list = false;
     static boolean list_skipped = false;
-    
+
     public static void main(String[] args) {
         String path = System.getProperty("user.dir");
         for (String arg : args) {
@@ -40,11 +40,11 @@ public class Main {
                         Walker.addSkipDir(arg.substring(11));
                     } else if (arg.startsWith("--skip-file=")) {
                         Walker.addSkipFile(arg.substring(12));
-                    }            
+                    }
             }
         }
 
-        Walker walker = new Walker(path, wait, list, list_skipped);
+        Walker walker = new Walker(path);
         if (cli) {
             Window window = new CliWindow(path);
             window.show(walker);

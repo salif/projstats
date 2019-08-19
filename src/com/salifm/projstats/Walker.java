@@ -17,11 +17,11 @@ class Walker {
     private boolean list_skipped;
     private Map<String, Integer> extensions;
 
-    Walker(String dir, boolean wait, boolean list, boolean list_skipped) {
+    Walker(String dir) {
         this.dir = dir;
-        this.wait = wait;
-        this.list = list;
-        this.list_skipped = list_skipped;
+        this.wait = Main.wait;
+        this.list = Main.list;
+        this.list_skipped = Main.list_skipped;
         this.extensions = new HashMap<>();
         Printer.print("scanning...");
         walk(dir);
@@ -132,7 +132,7 @@ class Walker {
     long getEmptyLines() {
         return this.emptyLines;
     }
-    
+
     String getDirectory() {
         return this.dir;
     }
