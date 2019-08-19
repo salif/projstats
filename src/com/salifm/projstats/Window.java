@@ -11,8 +11,8 @@ abstract class Window {
     }
 
     void show(Walker walker) {
-        File file = new File(this.dir);
-        add("name: ", file.getName());
+        this.dir = walker.getDirectory();
+        add("name: ", new File(walker.getDirectory()).getName());
         add("size: ", Unit.get(walker.getSize()));
         add("files: ", walker.getFiles());
         add("folders: ", walker.getFolders());

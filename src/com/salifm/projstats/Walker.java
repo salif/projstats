@@ -9,6 +9,7 @@ class Walker {
     private int folders;
     private long lines;
     private long emptyLines;
+    private String dir;
     private static List<String> skipDirs = new ArrayList<>(List.of(".git", "node_modules"));
     private static List<String> skipFiles = new ArrayList<>();
     private boolean wait;
@@ -17,6 +18,7 @@ class Walker {
     private Map<String, Integer> extensions;
 
     Walker(String dir, boolean wait, boolean list, boolean list_skipped) {
+        this.dir = dir;
         this.wait = wait;
         this.list = list;
         this.list_skipped = list_skipped;
@@ -27,10 +29,10 @@ class Walker {
     }
 
     private void walk(String dir) {
+        // Local variable files hides a class field. Therefore altered the variable name
+        File[] fileList = new File(dir).listFiles();
 
-        File[] files = new File(dir).listFiles();
-
-        for (final File f : files) {
+        for (final File f : fileList) {
             if (f.isDirectory()) {
                 if (!skipDirs.contains(f.getName())) {
                     this.folders++;
@@ -129,6 +131,10 @@ class Walker {
 
     long getEmptyLines() {
         return this.emptyLines;
+    }
+    
+    String getDirectory() {
+        return this.dir;
     }
 
     List<String[]> getExtensions() {
