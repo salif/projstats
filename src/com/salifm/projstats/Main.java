@@ -1,15 +1,14 @@
 package com.salifm.projstats;
 
 public class Main {
+    static boolean cli = true;
+    static boolean gui = true;
+    static boolean wait = true;
+    static boolean list = false;
+    static boolean list_skipped = false;
+
     public static void main(String[] args) {
         String path = System.getProperty("user.dir");
-
-        boolean cli = true;
-        boolean gui = true;
-        boolean wait = true;
-        boolean list = false;
-        boolean list_skipped = false;
-
         for (String arg : args) {
             switch (arg) {
                 case "--help":
@@ -45,7 +44,7 @@ public class Main {
             }
         }
 
-        Walker walker = new Walker(path, wait, list, list_skipped);
+        Walker walker = new Walker(path);
         if (cli) {
             Window window = new CliWindow(path);
             window.show(walker);
@@ -58,7 +57,7 @@ public class Main {
 
     private static void printHelp() {
         Printer.printf("%n  Usage: %n%n" +
-                "      projstats [options]%n%n" +
+                "      projstats [options] [directory]%n%n" +
                 "  options:%n%n" +
                 "      --cli                    Run without GUI%n" +
                 "      --gui                    Run without CLI%n" +
