@@ -18,7 +18,10 @@ abstract class Window {
         add("folders: ", walker.getFolders());
         add("lines: ", walker.getLines());
         add("empty lines: ", walker.getEmptyLines());
-        add("extensions: ", walker.getExtensions());
+        add("skipped files: ", walker.getSkippedFiles());
+        if (!Main.no_ext) {
+            add("extensions: ", walker.getExtensions());
+        }
     }
 
     abstract void add(String name, String text);
@@ -34,7 +37,7 @@ abstract class Window {
     void add(String name, List<String[]> list) {
         add(name, "");
         list.forEach(arr -> {
-            add("  ", String.format("%s (%s)",arr[0], arr[1]));
+            add("  ", String.format("%s (%s)", arr[0], arr[1]));
         });
     }
 }

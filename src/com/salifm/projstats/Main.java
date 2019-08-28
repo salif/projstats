@@ -6,6 +6,7 @@ public class Main {
     static boolean wait = true;
     static boolean list = false;
     static boolean list_skipped = false;
+    static boolean no_ext = false;
 
     public static void main(String[] args) {
         String path = System.getProperty("user.dir");
@@ -29,6 +30,8 @@ public class Main {
                 case "--list-skipped":
                     list_skipped = true;
                     break;
+                case "--no-ext":
+                    no_ext = true;
                 default:
                     if (arg.startsWith("--check-dir=")) {
                         Walker.checkDir(arg.substring(12));
@@ -36,10 +39,14 @@ public class Main {
                     } else if (arg.startsWith("--check-file=")) {
                         Walker.checkFile(arg.substring(13));
                         return;
+                    } else if (arg.startsWith("--list-ext=")) {
+                        Walker.addListExt(arg.substring(11));
                     } else if (arg.startsWith("--skip-dir=")) {
                         Walker.addSkipDir(arg.substring(11));
                     } else if (arg.startsWith("--skip-file=")) {
                         Walker.addSkipFile(arg.substring(12));
+                    } else if (arg.startsWith("--skip-ext=")) {
+                        Walker.addSkipExt(arg.substring(11));
                     }
             }
         }
@@ -64,10 +71,13 @@ public class Main {
                 "      --wait                   Run without progressbar%n" +
                 "      --list                   List files%n" +
                 "      --list-skipped           List skipped files and dirs%n" +
+                "      --list-ext=ext           List files with given extension%n" +
                 "      --check-dir=dir          Check if directory is skipped%n" +
                 "      --check-file=file        Check if file is skipped%n" +
                 "      --skip-dir=dir           Skip directory%n" +
                 "      --skip-file=file         Skip file%n" +
+                "      --skip-ext=ext           Skip files with given extension%n" +
+                "      --no-ext                 Don't show extensions%n" +
                 "      --help                   Print help%n%n");
     }
 }

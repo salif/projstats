@@ -4,14 +4,17 @@ import java.io.*;
 import java.util.*;
 
 class Walker {
-    private long size;
-    private int files;
-    private int folders;
-    private long lines;
-    private long emptyLines;
-    private String dir;
+    private long size = 0L;
+    private int files = 0;
+    private int folders = 0;
+    private long lines = 0L;
+    private long emptyLines = 0L;
+    private int skipped_files = 0;
+    private String dir = "";
+    private static List<String> listExt = new ArrayList<>();
     private static List<String> skipDirs = new ArrayList<>(List.of(".git", "node_modules"));
     private static List<String> skipFiles = new ArrayList<>();
+    private static List<String> skipExt = new ArrayList<>();
     private boolean wait;
     private boolean list;
     private boolean list_skipped;
@@ -66,7 +69,10 @@ class Walker {
             }
         }
 
-        if (isBinary || skipFiles.contains(name)) {
+        String extension = getExtension(name);
+
+        if (isBinary || skipFiles.contains(name) || skipExt.contains(extension)) {
+            this.skipped_files++;
             if (this.list_skipped) {
                 Printer.printf("%nskipped: %s", name);
             }
@@ -80,12 +86,19 @@ class Walker {
 
         if (this.list) {
             Printer.printf("%n%s", name);
+        } else if (listExt.contains(extension)) {
+            Printer.printf("%n%s", name);
         } else if (this.list_skipped) {
             // don't show progressbar if 'list_skipped' is true
         } else if (this.wait) {
             Printer.print(".");
         }
-        registerExtension(name);
+
+        if (this.extensions.containsKey(extension)) {
+            this.extensions.put(extension, this.extensions.get(extension) + 1);
+        } else {
+            this.extensions.put(extension, 1);
+        }
     }
 
     private static boolean charsBinary(String line) {
@@ -97,7 +110,7 @@ class Walker {
         return false;
     }
 
-    private void registerExtension(String name) {
+    private String getExtension(String name) {
         int ind = name.lastIndexOf('.');
         int p = name.lastIndexOf('/');
         String extension = "";
@@ -106,11 +119,7 @@ class Walker {
         } else {
             extension = "[none]";
         }
-        if (this.extensions.containsKey(extension)) {
-            this.extensions.put(extension, this.extensions.get(extension) + 1);
-        } else {
-            this.extensions.put(extension, 1);
-        }
+        return extension;
     }
 
     long getSize() {
@@ -131,6 +140,10 @@ class Walker {
 
     long getEmptyLines() {
         return this.emptyLines;
+    }
+
+    int getSkippedFiles() {
+        return this.skipped_files;
     }
 
     String getDirectory() {
@@ -179,11 +192,19 @@ class Walker {
         }
     }
 
+    static void addListExt(String ext) {
+        listExt.add(ext);
+    }
+
     static void addSkipDir(String dir) {
         skipDirs.add(dir);
     }
 
     static void addSkipFile(String file) {
         skipFiles.add(file);
+    }
+
+    static void addSkipExt(String ext) {
+        skipExt.add(ext);
     }
 }

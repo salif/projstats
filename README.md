@@ -22,45 +22,31 @@ Go to folder, open terminal and run `projstats`
 
 ## Options
 
-### --cli
+* `--cli` *Run without GUI*
 
-Run without GUI
+* `--gui` *Run without CLI*
 
-### --gui
+* `--wait` *Run without progressbar*
 
-Run without CLI
+* `--list` *List files*
 
-### --wait
+* `--list-skipped` *List skipped files and dirs*
 
-Run without progressbar
+* `--list-ext=ext` *List files with given extension*
 
-### --list
+* `--check-dir=dir` *Check if directory is skipped*
 
-List files
+* `--check-file=file` *Check if file is skipped (absolute path)*
 
-### --list-skipped
+* `--skip-dir=dir` *Skip directory*
 
-List skipped files and dirs
+* `--skip-file=file` *Skip file (absolute path)*
 
-### --check-dir=dir
+* `--skip-ext=ext` *Skip files with given extension*
 
-Check if directory is skipped
+* `--no-ext` *Don't show extensions*
 
-### --check-file=file
-
-Check if file is skipped [absolute path]
-
-### --skip-dir=dir
-
-Skip directory
-
-### --skip-file=file
-
-Skip file [absolute path]
-
-### --help
-
-Print help
+* `--help` *Print help*
 
 ## Example
 
