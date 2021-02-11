@@ -1,4 +1,4 @@
-package com.salifm.projstats;
+package eu.salif.projstats;
 
 class CliWindow extends Window {
     CliWindow(String dir) {

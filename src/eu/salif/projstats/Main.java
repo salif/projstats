@@ -1,4 +1,4 @@
-package com.salifm.projstats;
+package eu.salif.projstats;
 
 public class Main {
     static boolean cli = true;

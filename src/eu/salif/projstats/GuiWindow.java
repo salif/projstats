@@ -1,4 +1,4 @@
-package com.salifm.projstats;
+package eu.salif.projstats;
 
 import javax.swing.*;
 import java.util.List;

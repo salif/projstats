@@ -9,7 +9,7 @@ Count source lines of code
 
 ### Other distributions
 
-- [Download](https://github.com/salifm/projstats/releases)
+- [Download](https://github.com/salif/projstats/releases)
 - `sudo make install`
 
 ### Other OS
